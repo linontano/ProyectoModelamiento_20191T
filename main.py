@@ -5,7 +5,7 @@ semilla = 30
 num_peluqueros = 1
 tiempo_corte_min = 15
 tiempo_corte_max = 30
-t_llegadas = 20
+t_llegadas = 1
 tiempo_simulacion = 120
 total_clientes = 5
 
