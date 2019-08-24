@@ -1,4 +1,3 @@
-from os import terminal_size
 
 import numpy as np
 import simpy as sp
@@ -6,29 +5,33 @@ import math
 import random
 import matplotlib.pyplot as plt
 
-TOTAL_CLIENTES = 5000
+TOTAL_CLIENTES = 50
 LAMB1 = 3 #CADA LAMB1,2, U1,2 MINUTOS LLEGA/ATIENDE A UN PAQUETE
 LAMB2 = 1
 U1 = 10
 U2 = 1
-IMP = 7
+IMP = 1000
 colaC1 = 0
 SIZECOLA = 10
 colaC2 = 0
 SEMILLA = 30
 NSERVIDORES = 10
 t_sistema = 0
-
-numRecursos = np.zeros(TOTAL_CLIENTES * 2)
-tiempoRecursos = np.zeros(TOTAL_CLIENTES * 2)
+T_SIM = 200
+numRecursos = np.zeros(int(T_SIM*(1/LAMB1)*5))
+tiempoRecursos = np.zeros(int(T_SIM*(1/LAMB1)*5))
 indexRecursos = 0
 
 def sourceC1(env, totalClientes, tiempoArribo, servidores):
-    for i in range(totalClientes):
-        env.process(serviceC1(env, "PaqueteC1 %d" % i, servidores, 1, U1))
+    #for i in range(totalClientes):
+    i=0
+    while(True):
+        i+=1
         R = random.random()
-        t_arribo = -tiempoArribo*math.log(R)
+        t_arribo = -tiempoArribo * math.log(R)
         yield env.timeout(t_arribo)
+        env.process(serviceC1(env, "PaqueteC1 %d" % i, servidores, 1, U1))
+
 
 def serviceC1(env, name, servidor, prio, tiempoServicio):
     global colaC1
@@ -85,17 +88,17 @@ random.seed(SEMILLA)
 env = sp.Environment()
 servidores = sp.PriorityResource(env, NSERVIDORES)
 env.process(sourceC1(env, TOTAL_CLIENTES, LAMB1, servidores))
-env.run()
+env.run(until=T_SIM)
 
 print("***************fin simulacion***************************")
-tiempoPromedio = t_sistema / TOTAL_CLIENTES
-print("Tiempo promedio de un cliente en el sistema: %d" % tiempoPromedio)
+#tiempoPromedio = t_sistema / TOTAL_CLIENTES
+#print("Tiempo promedio de un cliente en el sistema: %d" % tiempoPromedio)
 
 for i in range(tiempoRecursos.size):
     if tiempoRecursos[i] <= 0:
         cut = i
         break
-
+print(tiempoRecursos);
 plt.plot(tiempoRecursos[:cut-1], numRecursos[:cut-1])
 plt.show()
 
