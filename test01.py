@@ -149,7 +149,107 @@ env.process(principal(env, servidores))
 #     llegadac1 = -lamb1 * math.log(R)
 #     #llegadac2 = -lamb2 * math.log(R)
 #     i += 1
-#     env.process(servicioC1(env, 'ConexionC1 %d' % i, servidores, wait=llegadac1, prio=1))
+#     env.process(servicioC1(env, 'Coneximport numpy as np
+import random as r
+import simpy as sp
+import math
+r.seed(30)
+
+
+def servicioC2F(env, name, servidor, wait):
+
+    with servidor.request() as request:
+        yield request
+        print("servDisponibles: ", servidor.capacity - servidor.count)
+        print("******* %s es atendido en el minuto %.2f" % (name, env.now))
+
+        yield env.timeout(wait)
+        print("------- %s se va en el minuto %.2f" % (name, env.now))
+    print("servDisponibles: ", servidor.capacity - servidor.count)
+
+def servicioC2(env, name, servidor, wait):
+    yield env.timeout(wait)
+    t_arribo = env.now
+
+    print("%s llego a la peluqueria en el minuto %.2f" % (name, t_arribo))
+
+
+
+    with servidor.request() as request:
+        while (servidor.capacity - servidor.count) < 2:
+            # next = env.peek()
+            # if next != sp.core.Infinity:
+            print("/////////%s CAPACIDAD NO SUFICIENTE, SE ENCOLA. %2.f" % (name, env.now))
+            env.step(False)
+
+        yield request
+        t_servicio = -3 * math.log(R)
+
+        yield(env.process(servicioC2F(env, name, servidor, wait=t_servicio)))
+        print("CONFIRMADO------- %s se fue en el minuto %.2f" % (name, env.now))
+    print("servDisponibles: ", servidor.import numpy as np
+import random as r
+import simpy as sp
+import math
+r.seed(30)
+
+
+def servicioC2F(env, name, servidor, wait):
+
+    with servidor.request() as request:
+        yield request
+        print("servDisponibles: ", servidor.capacity - servidor.count)
+        print("******* %s es atendido en el minuto %.2f" % (name, env.now))
+
+        yield env.timeout(wait)
+        print("------- %s se va en el minuto %.2f" % (name, env.now))
+    print("servDisponibles: ", servidor.capacity - servidor.count)
+
+def servicioC2(env, name, servidor, wait):
+    yield env.timeout(wait)
+    t_arribo = env.now
+
+    print("%s llego a la peluqueria en el minuto %.2f" % (name, t_arribo))
+
+
+
+    with servidor.request() as request:
+        while (servidor.capacity - servidor.count) < 2:
+            # next = env.peek()
+            # if next != sp.core.Infinity:
+            print("/////////%s CAPACIDAD NO SUFICIENTE, SE ENCOLA. %2.f" % (name, env.now))
+            env.step(False)
+
+        yield request
+        t_servicio = -3 * math.log(R)
+
+        yield(env.process(servicioC2F(env, name, servidor, wait=t_servicio)))
+        print("CONFIRMADO------- %s se fue en el minuto %.2f" % (name, env.now))
+    print("servDisponibles: ", servidor.capacity - servidor.count)
+
+R = r.random()
+env = sp.Environment()
+servidores = sp.PriorityResource(env, 5)
+for i in range(5):
+    R = r.random()
+    llegadac1 = -2 * math.log(R)
+    i += 1
+    env.process(servicioC2(env, 'ConexionC1 %d' % i, servidores, wait=llegadac1))
+
+env.run()
+capacity - servidor.count()
+
+R = r.random()
+env = sp.Environment()
+servidores = sp.PriorityResource(env, 5)
+for i in range(5):
+    R = r.random()
+    llegadac1 = -2 * math.log(R)
+    i += 1
+    env.process(servicioC2(env, 'ConexionC1 %d' % i, servidores, wait=llegadac1))
+
+env.run()
+ionC1 %d' % i, servidores, wait=llegadac1, prio=1))
 #     #env.process(servicioC2(env, 'ConexionC2 %d' % i, servidores, wait=llegadac2, prio=0))
 env.run()
 print("***************fin simulacion***************************")
